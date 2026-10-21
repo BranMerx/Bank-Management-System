@@ -53,3 +53,61 @@ CREATE TABLE IF NOT EXISTS BankTransactions(
 """)
 
 print("Tables created successfully")
+
+#Verifying the tables and close connection
+mycur.execute("SHOW TABLES")
+print("Tables in BankDB:")
+for table in mycur.fetchall():
+    print(table[0])
+
+#Inserting Sample Data
+mycur.execute("""
+INSERT INTO Customers (first_name, last_name, phone, address)
+VALUES
+('John', 'Smith', '1234567890', 'New York'),
+('Emma', 'Johnson', '2345678901', 'Chicago'),
+('Michael', 'Brown', '3456789012', 'Los Angeles')
+""")
+
+mycur.execute("""
+INSERT INTO Accounts (account_no, customer_id, account_type, balance)
+VALUES
+(10001, 1, 'Savings', 5000.00),
+(10002, 2, 'Current', 12000.00),
+(10003, 3, 'Savings', 8000.00)
+""")
+
+mycur.execute("""
+INSERT INTO BankTransactions
+(account_no, transaction_type, amount, transaction_date)
+VALUES
+(10001, 'Deposit', 5000.00, NOW()),
+(10002, 'Deposit', 12000.00, NOW()),
+(10003, 'Deposit', 8000.00, NOW())
+""")
+
+mycon.commit()
+
+print("Sample Data Inserted Successfully")
+
+#Verifying the inserted data
+mycur.execute("SELECT * FROM Customers")
+
+print("Customers:")
+
+for row in mycur.fetchall():
+    print(row)
+
+mycur.execute("SELECT * FROM Accounts")
+
+print("\nAccounts:")
+
+for row in mycur.fetchall():
+    print(row)
+
+mycur.execute("SELECT * FROM BankTransactions")
+
+print("\nBank Transactions:")
+
+for row in mycur.fetchall():
+    print(row)
