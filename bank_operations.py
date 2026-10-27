@@ -91,5 +91,28 @@ def withdraw_money():
             print("Insufficent Funds.")
             return
     sql = """
-    
+    UPDATE Accounts
+    SET balance = balance - %s
+    WHERE account_no = %s
     """
+    mycur.execute(sql, (amount, acc_no))
+    mycon.commit()
+
+
+    mycur.execute("""
+    INSERT INTO BankTransactions
+    (account_no, transaction_type, amount, transaction_date)
+    VALUES (%s, %s, %s, NOW())
+    """, (acc_no, 'Withdrawal', amount))
+
+    mycon.commit()
+
+    #Dipalying the result:
+
+    if result:
+        if amount <= balance:
+            print("Amount withdrawn successfully.")
+        else:
+            print("Insufficient Funds.")
+    else:
+        print("Account not found.")
